@@ -1,22 +1,14 @@
-﻿
-// img-processDlg.cpp: файл реализации
-//
-
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "img-process.h"
 #include "img-processDlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
-#define new DEBUG_NEW
+	#define new DEBUG_NEW
 #endif
 
-namespace imglib
-{
-	__declspec(dllimport) void Print();
-}
-
+#include <imglib.hpp>
 
 CimgprocessDlg::CimgprocessDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_IMGPROCESS_DIALOG, pParent)
@@ -87,7 +79,7 @@ HCURSOR CimgprocessDlg::OnQueryDragIcon()
 void CimgprocessDlg::btn_load_Clicked()
 {
 	imglib::Print();
-
+	
 	CStatic* pictureBox = (CStatic*)(GetDlgItem(picture_box));
 	
 	CRect rect;

@@ -1,9 +1,8 @@
-#include "Test.hpp"
+#include "App.hpp"
 
 namespace imglib
 {
 	void Print()
 	{
-
 	}
 }
