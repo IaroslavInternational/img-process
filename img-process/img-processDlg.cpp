@@ -27,9 +27,6 @@ BEGIN_MESSAGE_MAP(CimgprocessDlg, CDialogEx)
 	ON_BN_CLICKED(btn_load, &CimgprocessDlg::btn_load_Clicked)
 END_MESSAGE_MAP()
 
-
-// Обработчики сообщений CimgprocessDlg
-
 BOOL CimgprocessDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -69,37 +66,15 @@ void CimgprocessDlg::OnPaint()
 	}
 }
 
-// Система вызывает эту функцию для получения отображения курсора при перемещении
-//  свернутого окна.
 HCURSOR CimgprocessDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 void CimgprocessDlg::btn_load_Clicked()
-{
-	imglib::Print();
-	
+{	
 	CStatic* pictureBox = (CStatic*)(GetDlgItem(picture_box));
-	
-	CRect rect;
-	pictureBox->GetClientRect(rect);
-	
-	CClientDC dc(pictureBox);
-	
-	CImage img;
-	img.Load(L"C:\\Users\\HYPERPC\\Desktop\\test.bmp");
-	
-	CBitmap c_bmp;
-	c_bmp.Attach(img.Detach());
-	
-	CDC memoryDC;
-	memoryDC.CreateCompatibleDC(&dc);
-	memoryDC.SelectObject(c_bmp);
-	
-	BITMAP bmp;
-	c_bmp.GetBitmap(&bmp);
-	
-	dc.SetStretchBltMode(COLORONCOLOR);
-	dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &memoryDC, 0, 0, bmp.bmWidth, bmp.bmHeight, SRCCOPY);
+
+	imglib::Image img("C:\\Users\\HYPERPC\\source\\repos\\img-process\\res\\test.bmp");
+	img.attach2obj(GetSafeHwnd(), pictureBox);
 }
