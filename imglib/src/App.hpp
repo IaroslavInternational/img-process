@@ -57,6 +57,7 @@ namespace imglib
 		int*   get_R(int x, int y);
 		int*   get_G(int x, int y);
 		int*   get_B(int x, int y);
+		Pixel* get_pixel(int x, int y);
 		size_t get_width()  const noexcept;
 		size_t get_height() const noexcept;
 		void   set_filename(const std::string& filename);
@@ -93,7 +94,15 @@ namespace imglib
 		std::string filename;
 	};
 
+	int IMGLIB_API generate_rnd_number(int low, int high);
+
+	void IMGLIB_API set_pixel(Pixel* p_pixel_component, int value);
+
+	void IMGLIB_API to_blackwhite(Image& img);
+	
 	void IMGLIB_API to_monochrome(Image& img);
+
+	void IMGLIB_API add_noice(Image& img, int k);
 
 	/*****************************************************/
 }

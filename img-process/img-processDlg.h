@@ -1,8 +1,4 @@
-﻿
-// img-processDlg.h: файл заголовка
-//
-
-#pragma once
+﻿#pragma once
 
 #include <imglib.hpp>
 
@@ -24,10 +20,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void btn_load_Clicked();
-	afx_msg void btn_to_mono_Clicked();
+	afx_msg void btn_to_bw_Clicked();
 	inline  void UpdatePictureBox();
 private:
 	imglib::Image img{ "..\\res\\test.bmp" };
 public:
 	afx_msg void btn_backup_Clicked();
+	afx_msg void btn_to_mono_Clicked();
+	afx_msg void btn_noise_Clicked();
+	CSliderCtrl noice_koef_ctrl;
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };

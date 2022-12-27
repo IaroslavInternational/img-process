@@ -5,10 +5,13 @@
 #define IDD_IMGPROCESS_DIALOG           102
 #define IDR_MAINFRAME                   128
 #define IDC_BUTTON1                     1002
+#define btn_to_mono                     1002
 #define IDC_SLIDER1                     1003
+#define noice_koef                      1003
 #define IDC_BUTTON2                     1004
-#define btn_to_mono                     1004
+#define btn_to_bw                       1004
 #define IDC_BUTTON3                     1005
+#define btn_noise                       1005
 #define IDC_BUTTON4                     1006
 #define IDC_BUTTON5                     1007
 #define btn_backup                      1007

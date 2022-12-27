@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <iterator>
+#include <random>
 
 namespace imglib
 {
@@ -267,6 +268,11 @@ namespace imglib
 	{
 		return &pixels[y][x].blue;
 	}
+
+	Pixel* Image::get_pixel(int x, int y)
+	{
+		return &pixels[y][x];
+	}
 	
 	std::wstring str2wstring(const std::string& str)
 	{
@@ -274,7 +280,24 @@ namespace imglib
 		return strconverter.from_bytes(str);
 	}
 	
-	void to_monochrome(Image& img)
+	int IMGLIB_API generate_rnd_number(int low, int high)
+	{
+		std::random_device rd;
+		std::mt19937 rnd(rd());
+
+		std::uniform_int_distribution<int> uid(low, high);
+
+		return uid(rd);
+	}
+
+	void set_pixel(Pixel* p_pixel_component, int value)
+	{
+		p_pixel_component->red   = value;
+		p_pixel_component->green = value;
+		p_pixel_component->blue  = value;
+	}
+
+	void to_blackwhite(Image& img)
 	{
 		size_t width = img.get_width();
 		size_t height = img.get_height();
@@ -289,20 +312,71 @@ namespace imglib
 				
 				if (f <= 127.0f)
 				{
-					*img.get_R(i, j) = 0;
-					*img.get_G(i, j) = 0;
-					*img.get_B(i, j) = 0;
+					set_pixel(img.get_pixel(i, j), 0);
 				}
 				else
 				{
-					*img.get_R(i, j) = 255;
-					*img.get_G(i, j) = 255;
-					*img.get_B(i, j) = 255;
+					set_pixel(img.get_pixel(i, j), 255);
 				}
+			}
+		}
+
+		img.save("..\\res\\bw.bmp");
+		img.set_filename("..\\res\\bw.bmp");
+	}
+
+	void to_monochrome(Image& img)
+	{
+		size_t width = img.get_width();
+		size_t height = img.get_height();
+
+		float f;
+
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				f = (*img.get_R(i, j) + *img.get_G(i, j) + *img.get_B(i, j)) / 3;
+				
+				set_pixel(img.get_pixel(i, j), int(f));
 			}
 		}
 
 		img.save("..\\res\\mono.bmp");
 		img.set_filename("..\\res\\mono.bmp");
+	}
+
+	void add_noice(Image& img, int k)
+	{
+		k = 255 - k;
+
+		size_t width = img.get_width();
+		size_t height = img.get_height();
+
+		float f;
+
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				int rnd = generate_rnd_number(-255 + k, 255 - k);
+
+				if (*img.get_R(i, j) + rnd < 255 && *img.get_R(i, j) + rnd > 0)
+				{
+					*img.get_R(i, j) += rnd;
+				}
+				else if (*img.get_G(i, j) + rnd < 255 && *img.get_G(i, j) + rnd > 0)
+				{
+					*img.get_G(i, j) += rnd;
+				}
+				else if (*img.get_B(i, j) + rnd < 255 && *img.get_B(i, j) + rnd > 0)
+				{
+					*img.get_B(i, j) += rnd;
+				}
+			}
+		}
+
+		img.save("..\\res\\noise.bmp");
+		img.set_filename("..\\res\\noise.bmp");
 	}
 }

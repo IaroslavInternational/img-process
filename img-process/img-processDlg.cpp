@@ -4,6 +4,8 @@
 #include "img-processDlg.h"
 #include "afxdialogex.h"
 
+#include <thread>
+
 #ifdef _DEBUG
 	#define new DEBUG_NEW
 #endif
@@ -17,14 +19,18 @@ CimgprocessDlg::CimgprocessDlg(CWnd* pParent /*=nullptr*/)
 void CimgprocessDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, noice_koef, noice_koef_ctrl);
 }
 
 BEGIN_MESSAGE_MAP(CimgprocessDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(btn_load, &CimgprocessDlg::btn_load_Clicked)
-	ON_BN_CLICKED(btn_to_mono, &CimgprocessDlg::btn_to_mono_Clicked)
+	ON_BN_CLICKED(btn_load,   &CimgprocessDlg::btn_load_Clicked)
+	ON_BN_CLICKED(btn_to_bw,  &CimgprocessDlg::btn_to_bw_Clicked)
 	ON_BN_CLICKED(btn_backup, &CimgprocessDlg::btn_backup_Clicked)
+	ON_BN_CLICKED(btn_to_mono, &CimgprocessDlg::btn_to_mono_Clicked)
+	ON_BN_CLICKED(btn_noise, &CimgprocessDlg::btn_noise_Clicked)
+	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
 BOOL CimgprocessDlg::OnInitDialog()
@@ -37,6 +43,8 @@ BOOL CimgprocessDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Мелкий значок
 
 	// TODO: добавьте дополнительную инициализацию
+
+	noice_koef_ctrl.SetRange(0, 255);
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
 }
@@ -73,24 +81,51 @@ HCURSOR CimgprocessDlg::OnQueryDragIcon()
 
 void CimgprocessDlg::btn_load_Clicked()
 {	
-	UpdatePictureBox();
+	std::thread t(&CimgprocessDlg::UpdatePictureBox, this);
+	t.join();
 }
 
-
-void CimgprocessDlg::btn_to_mono_Clicked()
+void CimgprocessDlg::btn_to_bw_Clicked()
 {
-	imglib::to_monochrome(img);
-	UpdatePictureBox();
+	imglib::to_blackwhite(img);
+
+	std::thread t(&CimgprocessDlg::UpdatePictureBox, this);
+	t.join();
 }
 
 void CimgprocessDlg::btn_backup_Clicked()
 {
 	img.set_filename("..\\res\\test.bmp");
-	UpdatePictureBox();
+	
+	std::thread t(&CimgprocessDlg::UpdatePictureBox, this);
+	t.join();
 }
 
 inline void CimgprocessDlg::UpdatePictureBox()
 {
+	img.load();
+
 	CStatic* pictureBox = (CStatic*)(GetDlgItem(picture_box));
 	img.attach2obj(GetSafeHwnd(), pictureBox);
+}
+
+void CimgprocessDlg::btn_to_mono_Clicked()
+{
+	imglib::to_monochrome(img);
+
+	std::thread t(&CimgprocessDlg::UpdatePictureBox, this);
+	t.join();
+}
+
+void CimgprocessDlg::btn_noise_Clicked()
+{
+	imglib::add_noice(img, noice_koef_ctrl.GetPos());
+
+	std::thread t(&CimgprocessDlg::UpdatePictureBox, this);
+	t.join();
+}
+
+void CimgprocessDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	CDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
 }
