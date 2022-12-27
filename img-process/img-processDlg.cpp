@@ -8,8 +8,6 @@
 	#define new DEBUG_NEW
 #endif
 
-#include <imglib.hpp>
-
 CimgprocessDlg::CimgprocessDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_IMGPROCESS_DIALOG, pParent)
 {
@@ -25,6 +23,8 @@ BEGIN_MESSAGE_MAP(CimgprocessDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(btn_load, &CimgprocessDlg::btn_load_Clicked)
+	ON_BN_CLICKED(btn_to_mono, &CimgprocessDlg::btn_to_mono_Clicked)
+	ON_BN_CLICKED(btn_backup, &CimgprocessDlg::btn_backup_Clicked)
 END_MESSAGE_MAP()
 
 BOOL CimgprocessDlg::OnInitDialog()
@@ -73,8 +73,24 @@ HCURSOR CimgprocessDlg::OnQueryDragIcon()
 
 void CimgprocessDlg::btn_load_Clicked()
 {	
-	CStatic* pictureBox = (CStatic*)(GetDlgItem(picture_box));
+	UpdatePictureBox();
+}
 
-	imglib::Image img("C:\\Users\\HYPERPC\\source\\repos\\img-process\\res\\test.bmp");
+
+void CimgprocessDlg::btn_to_mono_Clicked()
+{
+	imglib::to_monochrome(img);
+	UpdatePictureBox();
+}
+
+void CimgprocessDlg::btn_backup_Clicked()
+{
+	img.set_filename("..\\res\\test.bmp");
+	UpdatePictureBox();
+}
+
+inline void CimgprocessDlg::UpdatePictureBox()
+{
+	CStatic* pictureBox = (CStatic*)(GetDlgItem(picture_box));
 	img.attach2obj(GetSafeHwnd(), pictureBox);
 }

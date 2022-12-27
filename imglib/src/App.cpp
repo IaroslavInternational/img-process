@@ -74,9 +74,9 @@ namespace imglib
 
 					for (int col = 0; col < dib_info.width; col++)
 					{
-						int blue = file.get();
+						int blue  = file.get();
 						int green = file.get();
-						int red = file.get();
+						int red   = file.get();
 
 						row_data.push_back(Pixel(red, green, blue));
 					}
@@ -237,10 +237,72 @@ namespace imglib
 			return PixelMatrix();
 		}
 	}
+
+	size_t Image::get_width() const noexcept
+	{
+		return pixels[0].size();
+	}
+
+	size_t Image::get_height() const noexcept
+	{
+		return pixels.size();
+	}
+
+	void Image::set_filename(const std::string& filename)
+	{
+		this->filename = filename;
+	}
+
+	int* Image::get_R(int x, int y)
+	{
+		return &pixels[y][x].red;
+	}
+
+	int* Image::get_G(int x, int y)
+	{
+		return &pixels[y][x].green;
+	}
+
+	int* Image::get_B(int x, int y)
+	{
+		return &pixels[y][x].blue;
+	}
 	
 	std::wstring str2wstring(const std::string& str)
 	{
 		std::wstring_convert<convert_t, wchar_t> strconverter;
 		return strconverter.from_bytes(str);
+	}
+	
+	void to_monochrome(Image& img)
+	{
+		size_t width = img.get_width();
+		size_t height = img.get_height();
+
+		float f;
+
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				f = (*img.get_R(i, j) + *img.get_G(i, j) + *img.get_B(i, j)) / 3;
+				
+				if (f <= 127.0f)
+				{
+					*img.get_R(i, j) = 0;
+					*img.get_G(i, j) = 0;
+					*img.get_B(i, j) = 0;
+				}
+				else
+				{
+					*img.get_R(i, j) = 255;
+					*img.get_G(i, j) = 255;
+					*img.get_B(i, j) = 255;
+				}
+			}
+		}
+
+		img.save("..\\res\\mono.bmp");
+		img.set_filename("..\\res\\mono.bmp");
 	}
 }

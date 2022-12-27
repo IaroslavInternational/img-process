@@ -53,6 +53,13 @@ namespace imglib
         void		from_pixel_matrix(const PixelMatrix& mtx);
 		void		attach2obj(HWND hwnd, CStatic* obj);
 		PixelMatrix get_matrix();
+	public:
+		int*   get_R(int x, int y);
+		int*   get_G(int x, int y);
+		int*   get_B(int x, int y);
+		size_t get_width()  const noexcept;
+		size_t get_height() const noexcept;
+		void   set_filename(const std::string& filename);
     private:
 		struct bmpfile_magic
 		{
@@ -85,6 +92,8 @@ namespace imglib
         PixelMatrix pixels;
 		std::string filename;
 	};
+
+	void IMGLIB_API to_monochrome(Image& img);
 
 	/*****************************************************/
 }
