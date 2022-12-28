@@ -18,6 +18,7 @@
 #define btn_load                        1009
 #define IDC_SLIDER2                     1010
 #define picture_box                     1011
+#define threshold_koef                  1013
 
 // Next default values for new objects
 // 
@@ -25,7 +26,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1013
+#define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

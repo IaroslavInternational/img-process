@@ -7,19 +7,23 @@
 
 namespace imglib
 {
+	/*****************************************************/
+
 	Pixel::Pixel()
 		:
-		red(0),
-		green(0),
-		blue(0)
+		red(0.0f),
+		green(0.0f),
+		blue(0.0f)
 	{}
 
-	Pixel::Pixel(int r, int g, int b)
+	Pixel::Pixel(float r, float g, float b)
 		: 
 		red(r), 
 		green(g), 
 		blue(b)
 	{}
+
+	/*****************************************************/
 
 	Image::Image(const std::string& filename)
 		:
@@ -79,7 +83,7 @@ namespace imglib
 						int green = file.get();
 						int red   = file.get();
 
-						row_data.push_back(Pixel(red, green, blue));
+						row_data.push_back(Pixel((float)red, (float)green, (float)blue));
 					}
 
 					file.seekg(dib_info.width % 4, std::ios::cur);
@@ -144,8 +148,6 @@ namespace imglib
 			{
 				std::vector<Pixel> row_data;
 				std::copy(pixels[row].begin(), pixels[row].end(), std::back_inserter(row_data));
-
-				//row_data.insert(pixels[row].begin(), pixels[row].end());
 
 				for (int col = 0; col < row_data.size(); col++)
 				{
@@ -254,17 +256,17 @@ namespace imglib
 		this->filename = filename;
 	}
 
-	int* Image::get_R(int x, int y)
+	float* Image::get_R(int x, int y)
 	{
 		return &pixels[y][x].red;
 	}
 
-	int* Image::get_G(int x, int y)
+	float* Image::get_G(int x, int y)
 	{
 		return &pixels[y][x].green;
 	}
 
-	int* Image::get_B(int x, int y)
+	float* Image::get_B(int x, int y)
 	{
 		return &pixels[y][x].blue;
 	}
@@ -274,13 +276,15 @@ namespace imglib
 		return &pixels[y][x];
 	}
 	
+	/*****************************************************/
+
 	std::wstring str2wstring(const std::string& str)
 	{
 		std::wstring_convert<convert_t, wchar_t> strconverter;
 		return strconverter.from_bytes(str);
 	}
-	
-	int IMGLIB_API generate_rnd_number(int low, int high)
+
+	int generate_rnd_number(int low, int high)
 	{
 		std::random_device rd;
 		std::mt19937 rnd(rd());
@@ -292,14 +296,14 @@ namespace imglib
 
 	void set_pixel(Pixel* p_pixel_component, int value)
 	{
-		p_pixel_component->red   = value;
-		p_pixel_component->green = value;
-		p_pixel_component->blue  = value;
+		p_pixel_component->red   = (float)value;
+		p_pixel_component->green = (float)value;
+		p_pixel_component->blue  = (float)value;
 	}
 
-	void to_blackwhite(Image& img)
+	void to_blackwhite(Image& img, int threshold)
 	{
-		size_t width = img.get_width();
+		size_t width  = img.get_width();
 		size_t height = img.get_height();
 
 		float f;
@@ -308,9 +312,9 @@ namespace imglib
 		{
 			for (int j = 0; j < height; j++)
 			{
-				f = (*img.get_R(i, j) + *img.get_G(i, j) + *img.get_B(i, j)) / 3;
+				f = (*img.get_R(i, j) + *img.get_G(i, j) + *img.get_B(i, j)) / 3.0f;
 				
-				if (f <= 127.0f)
+				if (f <= (float)threshold)
 				{
 					set_pixel(img.get_pixel(i, j), 0);
 				}
@@ -327,7 +331,7 @@ namespace imglib
 
 	void to_monochrome(Image& img)
 	{
-		size_t width = img.get_width();
+		size_t width  = img.get_width();
 		size_t height = img.get_height();
 
 		float f;
@@ -350,7 +354,7 @@ namespace imglib
 	{
 		k = 255 - k;
 
-		size_t width = img.get_width();
+		size_t width  = img.get_width();
 		size_t height = img.get_height();
 
 		float f;
@@ -361,15 +365,15 @@ namespace imglib
 			{
 				int rnd = generate_rnd_number(-255 + k, 255 - k);
 
-				if (*img.get_R(i, j) + rnd < 255 && *img.get_R(i, j) + rnd > 0)
+				if (*img.get_R(i, j) + rnd < 255.0f && *img.get_R(i, j) + rnd > 0.0f)
 				{
 					*img.get_R(i, j) += rnd;
 				}
-				else if (*img.get_G(i, j) + rnd < 255 && *img.get_G(i, j) + rnd > 0)
+				else if (*img.get_G(i, j) + rnd < 255.0f && *img.get_G(i, j) + rnd > 0.0f)
 				{
 					*img.get_G(i, j) += rnd;
 				}
-				else if (*img.get_B(i, j) + rnd < 255 && *img.get_B(i, j) + rnd > 0)
+				else if (*img.get_B(i, j) + rnd < 255.0f && *img.get_B(i, j) + rnd > 0.0f)
 				{
 					*img.get_B(i, j) += rnd;
 				}
@@ -379,4 +383,6 @@ namespace imglib
 		img.save("..\\res\\noise.bmp");
 		img.set_filename("..\\res\\noise.bmp");
 	}
+
+	/*****************************************************/
 }

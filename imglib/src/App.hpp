@@ -14,11 +14,11 @@ namespace imglib
 	/*****************************************************/
 
 	struct Pixel;
-	using  uchar_t	  = unsigned char;
-	using  uint32_t	  = unsigned int;
-	using  uint16_t	  = unsigned short int;
-	using  int32_t	  = signed int;
-	using  int16_t	  = signed short int;
+	using  uchar_t	   = unsigned char;
+	using  uint32_t	   = unsigned int;
+	using  uint16_t	   = unsigned short int;
+	using  int32_t	   = signed int;
+	using  int16_t	   = signed short int;
 	using  convert_t   = std::codecvt_utf8<wchar_t>;
 	using  PixelMatrix = std::vector<std::vector<Pixel>>;
 	
@@ -35,14 +35,13 @@ namespace imglib
 	struct IMGLIB_API Pixel
 	{
 		Pixel();
-		Pixel(int r, int g, int b);
+		Pixel(float r, float g, float b);
 		
-		int red;
-		int green;
-		int blue;
+		float red;
+		float green;
+		float blue;
 	};
-
-	class IMGLIB_API Image
+	class  IMGLIB_API Image
 	{
 	public:
 		Image(const std::string& filename);
@@ -54,9 +53,9 @@ namespace imglib
 		void		attach2obj(HWND hwnd, CStatic* obj);
 		PixelMatrix get_matrix();
 	public:
-		int*   get_R(int x, int y);
-		int*   get_G(int x, int y);
-		int*   get_B(int x, int y);
+		float*   get_R(int x, int y);
+		float*   get_G(int x, int y);
+		float*   get_B(int x, int y);
 		Pixel* get_pixel(int x, int y);
 		size_t get_width()  const noexcept;
 		size_t get_height() const noexcept;
@@ -94,14 +93,12 @@ namespace imglib
 		std::string filename;
 	};
 
-	int IMGLIB_API generate_rnd_number(int low, int high);
+	/*****************************************************/
 
+	int  IMGLIB_API generate_rnd_number(int low, int high);
 	void IMGLIB_API set_pixel(Pixel* p_pixel_component, int value);
-
-	void IMGLIB_API to_blackwhite(Image& img);
-	
+	void IMGLIB_API to_blackwhite(Image& img, int threshold);
 	void IMGLIB_API to_monochrome(Image& img);
-
 	void IMGLIB_API add_noice(Image& img, int k);
 
 	/*****************************************************/

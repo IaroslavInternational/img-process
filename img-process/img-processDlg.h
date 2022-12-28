@@ -30,4 +30,5 @@ public:
 	afx_msg void btn_noise_Clicked();
 	CSliderCtrl noice_koef_ctrl;
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	CSliderCtrl threshold_koef_ctrl;
 };

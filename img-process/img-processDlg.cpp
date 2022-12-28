@@ -20,16 +20,17 @@ void CimgprocessDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, noice_koef, noice_koef_ctrl);
+	DDX_Control(pDX, threshold_koef, threshold_koef_ctrl);
 }
 
 BEGIN_MESSAGE_MAP(CimgprocessDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(btn_load,   &CimgprocessDlg::btn_load_Clicked)
-	ON_BN_CLICKED(btn_to_bw,  &CimgprocessDlg::btn_to_bw_Clicked)
-	ON_BN_CLICKED(btn_backup, &CimgprocessDlg::btn_backup_Clicked)
+	ON_BN_CLICKED(btn_load,    &CimgprocessDlg::btn_load_Clicked)
+	ON_BN_CLICKED(btn_to_bw,   &CimgprocessDlg::btn_to_bw_Clicked)
+	ON_BN_CLICKED(btn_backup,  &CimgprocessDlg::btn_backup_Clicked)
 	ON_BN_CLICKED(btn_to_mono, &CimgprocessDlg::btn_to_mono_Clicked)
-	ON_BN_CLICKED(btn_noise, &CimgprocessDlg::btn_noise_Clicked)
+	ON_BN_CLICKED(btn_noise,   &CimgprocessDlg::btn_noise_Clicked)
 	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
@@ -45,6 +46,7 @@ BOOL CimgprocessDlg::OnInitDialog()
 	// TODO: добавьте дополнительную инициализацию
 
 	noice_koef_ctrl.SetRange(0, 255);
+	threshold_koef_ctrl.SetRange(0, 255);
 
 	return TRUE;  // возврат значения TRUE, если фокус не передан элементу управления
 }
@@ -87,7 +89,7 @@ void CimgprocessDlg::btn_load_Clicked()
 
 void CimgprocessDlg::btn_to_bw_Clicked()
 {
-	imglib::to_blackwhite(img);
+	imglib::to_blackwhite(img, threshold_koef_ctrl.GetPos());
 
 	std::thread t(&CimgprocessDlg::UpdatePictureBox, this);
 	t.join();

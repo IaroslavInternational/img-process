@@ -118,6 +118,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(SolutionDir)bin\$(Configuration)-$(Platform)\img-process\imglib.dll</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,6 +137,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>$(SolutionDir)bin\$(Configuration)-$(Platform)\img-process\imglib.dll</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
