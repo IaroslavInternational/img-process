@@ -125,11 +125,11 @@ namespace imglib
 			file.write((char*)(&magic), sizeof(magic));
 			
 			bmpfile_header header = { 0 };
-			header.bmp_offset = sizeof(bmpfile_magic)
-				+ sizeof(bmpfile_header) + sizeof(bmpfile_dib_info);
-			header.file_size = header.bmp_offset
-				+ (pixels.size() * 3 + pixels[0].size() % 4) * pixels.size();
+			header.bmp_offset = sizeof(bmpfile_magic) + sizeof(bmpfile_header) + sizeof(bmpfile_dib_info);
+			header.file_size = header.bmp_offset + (pixels.size() * 3 + pixels[0].size() % 4) * pixels.size();
+			
 			file.write((char*)(&header), sizeof(header));
+			
 			bmpfile_dib_info dib_info = { 0 };
 			dib_info.header_size = sizeof(bmpfile_dib_info);
 			dib_info.width = pixels[0].size();
